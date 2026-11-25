@@ -55,6 +55,11 @@ ENTRY = "\U0001F9D1\u200D\U0001F4BB"
 
 
 def main() -> None:
+    # Gate self-check (mirrors the kit's sealed scorer): the entry must be
+    # UTF-8 text of 1 to 16 characters and not only whitespace. Fail loudly
+    # instead of writing an invalid entry.
+    if not (1 <= len(ENTRY) <= 16) or not ENTRY.strip():
+        raise SystemExit("invalid entry: must be 1-16 non-whitespace characters")
     out_dir = os.environ.get("OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "entry.txt")
